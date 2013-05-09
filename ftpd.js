@@ -215,7 +215,12 @@ function createServer(host, sandbox) {
                                     logIf(3, "Directory has " + files.length + " files", socket);
                                     for (var i = 0; i < files.length; i++) {
                                         var file = files[ i ];
-                                        var s = fs.statSync( PathModule.join(path, file) );
+                                        try {
+                                          var s = fs.statSync( PathModule.join(path, file) );
+                                        }
+                                        catch (err) {
+                                          continue;
+                                        }
                                         var line = s.isDirectory() ? 'd' : '-';
                                         if (i > 0) dataSocket.write("\r\n");
                                         line += (0400 & s.mode) ? 'r' : '-';
